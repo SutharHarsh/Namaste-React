@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "description": "This is a Namaste-React",
   "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html",
     "test": "jest"
   },
   "author": "Harsh Suthar",
   "license": "ISC",
   "devDependencies": {
+    "@babel/preset-react": "^7.26.3",
     "parcel": "^2.14.4"
   },
   "dependencies": {
