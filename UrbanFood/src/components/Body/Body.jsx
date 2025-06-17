@@ -1,3 +1,4 @@
+import Shimmer from "../Shimmer-UI/Shimmer";
 import ResCard from "./ResCard";
 import { useEffect, useState } from "react";
 
@@ -6,13 +7,16 @@ function Body() {
   const [filterApplied, setFilterApplied] = useState(false);
   const [filterData, setFilterData] = useState([]);
   const [newData, setNewData] = useState([]);
+  const [search, setSearch] = useState("");
+  // const [searchData, setSearchData] = useState([]);
 
+  // fetch API
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [search]);
 
   const fetchData = async () => {
-    const data = await fetch("https://dummyjson.com/products");
+    const data = await fetch("https://dummyjson.com/products?limit=14");
 
     const json = await data.json();
     const products = json.products;
@@ -20,14 +24,27 @@ function Body() {
     setNewData(products);
   };
 
-  console.log(newData);
-
-  return (
+  return newData.length === 0 ? (
+    <Shimmer />
+  ) : (
     <div>
       <div className="flex gap-5 items-center">
         <div className="px-5 pt-5 flex gap-3">
-          <input className="border-1 border-black" type="text" />
-          <button className="bg-gray-300 px-4 rounded-sm py-1 cursor-pointer">
+          <input
+            onChange={(e) => setSearch(e.target.value)}
+            className="border-1 border-black"
+            type="text"
+            value={search}
+          />
+          <button
+            onClick={() => {
+              const searchProduct = newData.filter((res) =>
+                res.brand.toLowerCase().includes(search.toLowerCase())
+              );
+              setNewData(searchProduct);
+            }}
+            className="bg-gray-300 px-4 rounded-sm py-1 cursor-pointer"
+          >
             Search
           </button>
         </div>
