@@ -2,6 +2,7 @@ import Shimmer from "../Shimmer-UI/Shimmer";
 import ResCard from "./ResCard";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
+import { DATA_API } from "../../utils/constants";
 
 function Body() {
   const [rating, setRating] = useState(0);
@@ -16,7 +17,7 @@ function Body() {
   }, [search]);
 
   const fetchData = async () => {
-    const data = await fetch("https://dummyjson.com/products?limit=14");
+    const data = await fetch(DATA_API);
 
     const json = await data.json();
     const products = json.products;

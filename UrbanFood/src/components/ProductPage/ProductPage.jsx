@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ProductPageShimmer from "../Shimmer-UI/ProductPageShimmer";
+import { PRODUCT_API } from "../../utils/constants";
 
 const ProductPage = () => {
   const [productData, setProductData] = useState([]);
@@ -11,7 +12,7 @@ const ProductPage = () => {
   }, []);
 
   const fetchProductData = async () => {
-    const data = await fetch("https://dummyjson.com/products/" + productId);
+    const data = await fetch(PRODUCT_API + productId);
     const json = await data.json();
 
     setProductData(json);
