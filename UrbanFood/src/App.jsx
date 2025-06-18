@@ -5,6 +5,7 @@ import { createBrowserRouter, Outlet } from "react-router-dom";
 import Contact from "./components/Contact/Contact";
 import About from "./components/About/About";
 import Error from "./components/Error/Error";
+import ProductPage from "./components/ProductPage/ProductPage";
 
 function App() {
   return (
@@ -32,6 +33,10 @@ export const appRouter = createBrowserRouter([
         path: "/about",
         element: <About />,
       },
+      {
+        path: "/productpage/:productId",
+        element: <ProductPage />
+      }
     ],
     errorElement: <Error />,
   },

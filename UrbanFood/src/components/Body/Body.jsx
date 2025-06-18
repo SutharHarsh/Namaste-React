@@ -1,6 +1,7 @@
 import Shimmer from "../Shimmer-UI/Shimmer";
 import ResCard from "./ResCard";
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 
 function Body() {
   const [rating, setRating] = useState(0);
@@ -8,7 +9,6 @@ function Body() {
   const [filterData, setFilterData] = useState([]);
   const [newData, setNewData] = useState([]);
   const [search, setSearch] = useState("");
-  // const [searchData, setSearchData] = useState([]);
 
   // fetch API
   useEffect(() => {
@@ -73,8 +73,16 @@ function Body() {
       </div>
       <div className="flex flex-wrap">
         {filterApplied
-          ? filterData.map((res) => <ResCard key={res.id} resData={res} />)
-          : newData.map((res) => <ResCard key={res.id} resData={res} />)}
+          ? filterData.map((res) => (
+              <Link key={res.id} to={"/productpage/" + res.id}>
+                <ResCard resData={res} />
+              </Link>
+            ))
+          : newData.map((res) => (
+              <Link key={res.id} to={"/productpage/" + res.id}>
+                <ResCard resData={res} />
+              </Link>
+            ))}
       </div>
     </div>
   );
