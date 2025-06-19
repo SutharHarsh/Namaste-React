@@ -3,33 +3,23 @@ import ResCard from "./ResCard";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { DATA_API } from "../../utils/constants";
+import useShowProducts from "../../utils/useShowProducts";
 
 function Body() {
   const [rating, setRating] = useState(0);
   const [filterApplied, setFilterApplied] = useState(false);
   const [filterData, setFilterData] = useState([]);
-  const [newData, setNewData] = useState([]);
+  // const [newData, setNewData] = useState([]);
   const [search, setSearch] = useState("");
 
-  // fetch API
-  useEffect(() => {
-    fetchData();
-  }, [search]);
-
-  const fetchData = async () => {
-    const data = await fetch(DATA_API);
-
-    const json = await data.json();
-    const products = json.products;
-
-    setNewData(products);
-  };
+  const newData = useShowProducts();
 
   return newData.length === 0 ? (
     <Shimmer />
   ) : (
     <div>
       <div className="flex gap-5 items-center">
+        {/* Search */}
         <div className="px-5 pt-5 flex gap-3">
           <input
             onChange={(e) => setSearch(e.target.value)}
@@ -42,13 +32,16 @@ function Body() {
               const searchProduct = newData.filter((res) =>
                 res.brand.toLowerCase().includes(search.toLowerCase())
               );
-              setNewData(searchProduct);
+              setFilterData(searchProduct);
+              setFilterApplied(true);
             }}
             className="bg-gray-300 px-4 rounded-sm py-1 cursor-pointer"
           >
             Search
           </button>
         </div>
+
+        {/* Filter */}
         <div className="flex items-center justify-center pt-5 gap-2">
           <input
             onChange={(e) => setRating(e.target.value)}
@@ -57,14 +50,36 @@ function Body() {
           />
           <button
             onClick={() => {
-              const filterProductList = newData.filter(
-                (res) => res.rating >= rating
-              );
+              let filterProductList = [];
+              const originalFilterList = filterData;
 
-              setFilterData(filterProductList);
+              if (filterData) {
+                filterProductList = filterData.filter(
+                  (res) => res.rating >= rating
+                );
+              } else {
+                filterProductList = newData.filter(
+                  (res) => res.rating >= rating
+                );
+              }
 
-              if (rating > 0) setFilterApplied(true);
-              else setFilterApplied(false);
+              // const filterProductList = newData.filter(
+              //   (res) => res.rating >= rating
+              // );
+
+              // if (filterData) return console.log("there is a product!");
+              console.log(originalFilterList);
+
+              // setFilterApplied(true);
+              if (rating > 0) {
+                setFilterApplied(true);
+                setFilterData(filterProductList);
+                console.log("I am here");
+              } else if (rating <= 0) {
+                console.log("yooo");
+                setFilterApplied(true);
+                setFilterData(originalFilterList);
+              } else setFilterApplied(false);
             }}
             className="bg-amber-500 px-5 py-1 border-1 border-black cursor-pointer"
           >
@@ -72,6 +87,8 @@ function Body() {
           </button>
         </div>
       </div>
+
+      {/* Product Cards */}
       <div className="flex flex-wrap">
         {filterApplied
           ? filterData.map((res) => (
