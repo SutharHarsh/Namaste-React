@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { DATA_API } from './constants';
 
-const useShowProducts = () => {
+const useShowProducts = (search) => {
 
     const [newData, setNewData] = useState([])
   
     useEffect(() => {
         fetchData();
-    }, [])
+    }, [search])
 
     const fetchData = async () => {
         const data = await fetch(DATA_API);
