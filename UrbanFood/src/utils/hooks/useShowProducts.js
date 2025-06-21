@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { DATA_API } from './constants';
+import { DATA_API } from '../data/constants';
 
 const useShowProducts = (search) => {
 

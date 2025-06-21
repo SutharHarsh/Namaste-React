@@ -106,17 +106,18 @@ import Shimmer from "../Shimmer-UI/Shimmer";
 import ResCard from "./ResCard";
 import { useState, useMemo } from "react";
 import { Link } from "react-router";
-import useShowProducts from "../../utils/useShowProducts";
+import useShowProducts from "../../utils/hooks/useShowProducts";
+import useOnlinseStatus from "../../utils/hooks/useOnlinseStatus";
 
 function Body() {
   // Simplified state - only store filter criteria, not filtered data
   const [rating, setRating] = useState(0);
   const [search, setSearch] = useState("");
 
-  // Get all products from custom hook
+  const onlineStatus = useOnlinseStatus();
   const allProducts = useShowProducts();
 
-  // Derive filtered products from state - no manual button clicking needed
+  
   const filteredProducts = useMemo(() => {
     let result = allProducts;
 
@@ -126,7 +127,7 @@ function Body() {
     }
 
     // Apply search filter
-    if (search.trim()) {
+    if (search) {
       result = result.filter((product) =>
         product.brand.toLowerCase().includes(search.toLowerCase())
       );
@@ -135,19 +136,11 @@ function Body() {
     return result;
   }, [allProducts, rating, search]); // Automatically recalculates when any dependency changes
 
-  // Event handlers - much simpler
-  const handleSearchChange = (e) => {
-    setSearch(e.target.value); // Real-time filtering
-  };
-
-  const handleRatingChange = (e) => {
-    setRating(Number(e.target.value)); // Real-time filtering
-  };
-
-  const clearAllFilters = () => {
-    setSearch("");
-    setRating(0);
-  };
+  // Offline
+  if (onlineStatus === false)
+    return (
+      <h1 className="p-20 text-2xl">Please check your internet connection!</h1>
+    );
 
   // Loading state
   if (allProducts.length === 0) {
@@ -162,7 +155,7 @@ function Body() {
         <div className="flex gap-3 items-center">
           <label className="font-medium">Search:</label>
           <input
-            onChange={handleSearchChange}
+            onChange={(e) => setSearch(e.target.value)}
             className="border border-gray-300 px-3 py-2 rounded-md"
             type="text"
             value={search}
@@ -174,7 +167,7 @@ function Body() {
         <div className="flex items-center gap-2">
           <label className="font-medium">Min Rating:</label>
           <input
-            onChange={handleRatingChange}
+            onChange={(e) => setRating(e.target.value)}
             type="number"
             min="0"
             max="5"
@@ -187,7 +180,10 @@ function Body() {
         {/* Clear Filters Button */}
         {(search || rating > 0) && (
           <button
-            onClick={clearAllFilters}
+            onClick={() => {
+              setSearch("");
+              setRating(0);
+            }}
             className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
           >
             Clear All
@@ -231,7 +227,10 @@ function Body() {
               Try adjusting your search or rating filter
             </p>
             <button
-              onClick={clearAllFilters}
+              onClick={() => {
+                setSearch("");
+                setRating(0);
+              }}
               className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
             >
               Show All Products

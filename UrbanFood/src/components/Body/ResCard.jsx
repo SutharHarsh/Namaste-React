@@ -1,7 +1,3 @@
-// import IMG_URL from "../../utils/constants.js"
-
-import { useState } from "react";
-
 const ResCard = (props) => {
   let { resData } = props;
   const { images, brand, description, rating, price } = resData;

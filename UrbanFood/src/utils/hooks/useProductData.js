@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { PRODUCT_API } from './constants';
+import { PRODUCT_API } from '../data/constants';
 
 const useProductData = (productId) => {
 

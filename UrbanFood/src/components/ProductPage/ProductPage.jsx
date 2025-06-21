@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import ProductPageShimmer from "../Shimmer-UI/ProductPageShimmer";
-import useProductData from "../../utils/useProductData";
+import useProductData from "../../utils/hooks/useProductData";
 
 const ProductPage = () => {
   const { productId } = useParams();
