@@ -103,7 +103,7 @@
 // export default Body;
 
 import Shimmer from "../Shimmer-UI/Shimmer";
-import ResCard from "./ResCard";
+import ProductCard, { withLowStockLabel } from "./ProductCard";
 import { useState, useMemo } from "react";
 import { Link } from "react-router";
 import useShowProducts from "../../utils/hooks/useShowProducts";
@@ -117,19 +117,20 @@ function Body() {
   const onlineStatus = useOnlinseStatus();
   const allProducts = useShowProducts();
 
-  
+  const LowStockProductCard = withLowStockLabel(ProductCard);
+
   const filteredProducts = useMemo(() => {
     let result = allProducts;
 
     // Apply rating filter
     if (rating > 0) {
-      result = result.filter((product) => product.rating >= rating);
+      result = result.filter((product) => product?.rating >= rating);
     }
 
     // Apply search filter
     if (search) {
       result = result.filter((product) =>
-        product.brand.toLowerCase().includes(search.toLowerCase())
+        product?.brand?.toLowerCase().includes(search.toLowerCase())
       );
     }
 
@@ -217,7 +218,12 @@ function Body() {
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <Link key={product.id} to={"/productpage/" + product.id}>
-              <ResCard resData={product} />
+              {product.stock > 50 ? (
+                <LowStockProductCard resData={product} />
+              ) : (
+                <ProductCard resData={product} />
+              )}
+              {/* <ProductCard resData={product} /> */}
             </Link>
           ))
         ) : (
