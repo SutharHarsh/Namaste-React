@@ -104,10 +104,11 @@
 
 import Shimmer from "../Shimmer-UI/Shimmer";
 import ProductCard, { withLowStockLabel } from "./ProductCard";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useContext } from "react";
 import { Link } from "react-router";
 import useShowProducts from "../../utils/hooks/useShowProducts";
 import useOnlinseStatus from "../../utils/hooks/useOnlinseStatus";
+import UserContext from "../../utils/context/UserContext";
 
 function Body() {
   // Simplified state - only store filter criteria, not filtered data
@@ -116,6 +117,8 @@ function Body() {
 
   const onlineStatus = useOnlinseStatus();
   const allProducts = useShowProducts();
+
+  const { userName ,setUserName } = useContext(UserContext);
 
   const LowStockProductCard = withLowStockLabel(ProductCard);
 
@@ -190,6 +193,15 @@ function Body() {
             Clear All
           </button>
         )}
+
+        <div>
+          <label className="p-2">User Name: </label>
+          <input
+            className="border-1 border-black p-1"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+          />
+        </div>
       </div>
 
       {/* Results Summary */}

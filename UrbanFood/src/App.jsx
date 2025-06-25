@@ -3,18 +3,23 @@ import Body from "./components/Body/Body";
 import Header from "./components/Header/Header";
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import Contact from "./components/Contact/Contact";
-import About from "./components/About/About";
 import Error from "./components/Error/Error";
 import ProductPage from "./components/ProductPage/ProductPage";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState } from "react";
+import UserContext from "./utils/context/UserContext";
 
 const Grocery = lazy(() => import("./components/GroceryPage/Grocery"));
+const About = lazy(() => import("./components/About/About"));
 
 function App() {
+  const [userName, setUserName] = useState("Harsh Suthar");
+
   return (
     <>
-      <Header />
-      <Outlet />
+      <UserContext.Provider value={{ userName: userName, setUserName }}>
+        <Header />
+        <Outlet />
+      </UserContext.Provider>
     </>
   );
 }
@@ -34,7 +39,11 @@ export const appRouter = createBrowserRouter([
       },
       {
         path: "/about",
-        element: <About />,
+        element: (
+          <Suspense fallback={<h1 className="p-10 text-2xl">Loading...</h1>}>
+            <About />
+          </Suspense>
+        ),
       },
       {
         path: "/productpage/:productId",

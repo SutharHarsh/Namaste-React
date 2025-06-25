@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import useOnlinseStatus from "../../utils/hooks/useOnlinseStatus";
+import UserContext from "../../utils/context/UserContext";
 
 const Header = () => {
   const [btnName, setBtnName] = useState("Login");
   const networkStatus = useOnlinseStatus();
+
+  const { userName} = useContext(UserContext);
+  
 
   return (
     <div className="sticky top-0 shadow-2xs flex justify-between items-center px-5 py-5 bg-gray-800 text-white z-10">
@@ -38,6 +42,7 @@ const Header = () => {
         >
           {btnName}
         </button>
+        <li>{userName}</li>
       </ul>
     </div>
   );

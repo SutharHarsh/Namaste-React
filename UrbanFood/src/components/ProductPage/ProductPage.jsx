@@ -3,11 +3,13 @@ import ProductPageShimmer from "../Shimmer-UI/ProductPageShimmer";
 import useProductData from "../../utils/hooks/useProductData";
 import Review from "./Review";
 import { v4 as uuidv4 } from "uuid";
+import { useState } from "react";
 
 const ProductPage = () => {
   const { productId } = useParams();
   const productData = useProductData(productId);
   const { thumbnail, brand, description, rating, price, reviews } = productData;
+  const [showIndex, setShowIndex] = useState(null);
 
   if (productData.length === 0) return <ProductPageShimmer />;
 
@@ -29,11 +31,16 @@ const ProductPage = () => {
       </div>
       {/* Reviews*/}
       <div className="w-6/12 ml-20 p-3 my-5">
-        {reviews.map((review) => {
+        {reviews.map((review, index) => {
           const uniqueId = uuidv4();
           return (
-          <Review key={uniqueId} reviewData={review} />
-          )
+            <Review
+              key={uniqueId}
+              reviewData={review}
+              showData={index === showIndex ? true : false}
+              setShowIndex={() => setShowIndex(index === showIndex ? null : index)}
+            />
+          );
         })}
       </div>
     </>
