@@ -2,13 +2,16 @@ import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import useOnlinseStatus from "../../utils/hooks/useOnlinseStatus";
 import UserContext from "../../utils/context/UserContext";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const [btnName, setBtnName] = useState("Login");
   const networkStatus = useOnlinseStatus();
 
-  const { userName} = useContext(UserContext);
-  
+  const { userName } = useContext(UserContext);
+
+  const cartItems = useSelector((store) => store.cart.items);
+  console.log(cartItems);
 
   return (
     <div className="sticky top-0 shadow-2xs flex justify-between items-center px-5 py-5 bg-gray-800 text-white z-10">
@@ -30,7 +33,9 @@ const Header = () => {
         <Link to="/contact">
           <li>Contact</li>
         </Link>
-        <li>Cart</li>
+        <Link to="/cart">
+          <li className="font-bold">Cart ( {cartItems.length} ) </li>
+        </Link>
         <Link to="/grocery">
           <li>Grocery</li>
         </Link>
